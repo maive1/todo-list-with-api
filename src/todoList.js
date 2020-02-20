@@ -11,16 +11,100 @@ class TodoList extends React.Component {
             count: 0,
         }
     }
-  
+
+    componentDidMount(){
+        this.getUser()
+    }
+
+    getUser(){
+    fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(resp => {
+            if (resp.ok === true) {
+                this.getTodos()
+            } else {
+                this.createUser()
+            }
+        })
+        .then(data => {
+            console.log(data.label)
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+    createUser(){
+        fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
+        method: "POST",
+        body: JSON.stringify([]),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(resp => {
+            return resp.json();
+        })
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    getTodos(){
+        fetch('https://assets.breatheco.de/apis/fake/todos/user/maive',{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(resp => {
+                    return resp.json()
+            })
+            .then(data => {
+                this.setState({
+                    notes: data,
+                    counter: data.length
+                })
+                console.log(data.label)
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+    
 
     addNotes = (e) => {       
         
         if(e.keyCode === 13 && e.target.value !== ''){
-        this.setState({            
-            notes: this.state.notes.concat(e.target.value),
-            count: this.state.count + 1
+            let newState = Object.assign({}, this.state);
+            newState.notes.push({label:e.target.value, done: false});
+            console.log(newState.notes) 
             
-        });         
+            fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
+                method: "PUT",
+                body: JSON.stringify( newState.notes.map((item => item))),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(resp => {
+                    return resp.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    this.getTodos()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            
         e.target.value='';
         }       
     }
@@ -29,11 +113,45 @@ class TodoList extends React.Component {
     deleteNotes = (i) => {
         let newState = Object.assign({},this.state);
         newState.notes.splice(i,1);       
-        this.setState({
-            newState,
-            count: this.state.count - 1
+        fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
+            method: "PUT",
+            body: JSON.stringify( newState.notes.map((item => item))),
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
-    }
+            .then(resp => {
+                return resp.json();
+            })
+            .then(data => {
+                console.log(data);
+                this.getTodos()
+            })
+            .catch(error => {
+                console.log(error);
+            });
+   }
+   deleteAllTasks = (e) => {
+    let newState = Object.assign({}, this.state);
+    newState.notes.splice(0, newState.notes.length)
+    fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
+        method: "PUT",
+        body: JSON.stringify([{'label': 'no hay tareas', 'done': false}]),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(resp => {
+            return resp.json();
+        })
+        .then(data => {
+            console.log(data);
+            this.getTodos();
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
 
 
     render () {
@@ -51,7 +169,7 @@ class TodoList extends React.Component {
                             <input className='form-control-lg' type='text' placeholder='What needs to be done?' onKeyDown={(e) => this.addNotes(e)}></input>
                             {this.state.notes.map((item,i)=>{
                                 return <li key={i} className='list-group-item d-flex justify-content-between align-items-center '>{item} <span  onClick={(i)=> this.deleteNotes(i)}><FontAwesomeIcon icon={faTrash} /></span></li>})}
-                            <div className='count list-group-item'>{this.state.count} item left</div>
+                            <div className='count list-group-item'>{this.state.count} item left <span className='delAll' onClick={(e) => this.deleteAllTasks(e)}>Clear All</span></div>
                             </ul>
                         </div>
                     </div> 
