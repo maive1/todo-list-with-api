@@ -1,15 +1,21 @@
+.todolist {
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+}
 .card {
     height: 620px;
     width: 600px;
     background-image: url(https://c.wallhere.com/photos/7d/1f/2560x1440_px_abstract-780560.jpg!d);
 }
 .title {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 80px;
     color: whitesmoke;
   }
  
-.count, li {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 15px;
+li {
+    font-size: 15px;   
+}
+
+.counter {
+    font-size: 13px;
+    font-weight: bold;
 }

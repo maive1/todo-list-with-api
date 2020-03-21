@@ -70,7 +70,7 @@ class TodoList extends React.Component {
             .then(data => {
                 this.setState({
                     notes: data,
-                    counter: data.length
+                    count: data.length
                 })
                 console.log(data.label)
             })
@@ -81,7 +81,6 @@ class TodoList extends React.Component {
     
 
     addNotes = (e) => {       
-        
         if(e.keyCode === 13 && e.target.value !== ''){
             let newState = Object.assign({}, this.state);
             newState.notes.push({label:e.target.value, done: false});
@@ -110,9 +109,9 @@ class TodoList extends React.Component {
     }
     
 
-    deleteNotes = (i) => {
+    deleteNotes = (e) => {
         let newState = Object.assign({},this.state);
-        newState.notes.splice(i,1);       
+        newState.notes.splice(e,1);       
         fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
             method: "PUT",
             body: JSON.stringify( newState.notes.map((item => item))),
@@ -131,12 +130,12 @@ class TodoList extends React.Component {
                 console.log(error);
             });
    }
-   deleteAllTasks = (e) => {
+   deleteAllNotes = (e) => {
     let newState = Object.assign({}, this.state);
     newState.notes.splice(0, newState.notes.length)
     fetch('https://assets.breatheco.de/apis/fake/todos/user/maive', {
         method: "PUT",
-        body: JSON.stringify([{'label': 'no hay tareas', 'done': false}]),
+        body: JSON.stringify([{'label': 'there are no notes', 'done': false}]),
         headers: {
             "Content-Type": "application/json"
         }
@@ -156,7 +155,7 @@ class TodoList extends React.Component {
 
     render () {
         return (
-            <div className='container m-auto'>
+            <div className='container m-auto todolist'>
                 <div className='card m-auto p-3 overflow-auto'>
                     <div className='row'>
                         <div className='col col-lg-6  m-auto text-center'>
@@ -165,15 +164,20 @@ class TodoList extends React.Component {
                     </div>
                     <div className='row'>
                         <div className='col col-lg-10 m-auto'>
-                            <ul className='list-group'>
-                            <input className='form-control-lg' type='text' placeholder='What needs to be done?' onKeyDown={(e) => this.addNotes(e)}></input>
+                            <ul className='row list-group'>
+                            <input className='form-control-lg ' type='text' placeholder='What needs to be done?' onKeyDown={(e) => this.addNotes(e)}></input>
                             {this.state.notes.map((item,i)=>{
-                                return <li key={i} className='list-group-item d-flex justify-content-between align-items-center '>{item} <span  onClick={(i)=> this.deleteNotes(i)}><FontAwesomeIcon icon={faTrash} /></span></li>})}
-                            <div className='count list-group-item'>{this.state.count} item left <span className='delAll' onClick={(e) => this.deleteAllTasks(e)}>Clear All</span></div>
+                                return <li key={i} className='list-group-item d-flex justify-content-between align-items-center '>{item.label} <button type="button" className="btn btn-sm"  onClick={(e)=> this.deleteNotes(e)}><FontAwesomeIcon icon={faTrash} /></button></li>})}
+                            <li className="d-inline counter list-group-item">
+                                <span className='col-3 offset-10'>{this.state.count-1} Todo's </span>
+                            </li>
                             </ul>
                         </div>
                     </div> 
-                </div>               
+                    <div className="row ">
+                        <button className='btn btn-sm col-3 offset-9 bg-info' type="button" onClick={(e) => this.deleteAllNotes(e)}>Delete All Notes</button>
+                    </div>
+                </div>    
             </div>
         )
     }
@@ -181,3 +185,7 @@ class TodoList extends React.Component {
 }
 
 export default TodoList
+
+
+
+
