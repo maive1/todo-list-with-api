@@ -1,21 +1,28 @@
 .todolist {
-   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif !important;
 }
 .card {
-    height: 620px;
-    width: 600px;
-    background-image: url(https://c.wallhere.com/photos/7d/1f/2560x1440_px_abstract-780560.jpg!d);
+  height: 620px;
+  width: 600px;
+  background-image: url(https://c.wallhere.com/photos/7d/1f/2560x1440_px_abstract-780560.jpg!d);
 }
 .title {
-    font-size: 80px;
-    color: whitesmoke;
-  }
- 
+  font-size: 4rem;
+  color: whitesmoke;
+}
+
 li {
-    font-size: 15px;   
+  font-size: 15px;
 }
 
 .counter {
-    font-size: 13px;
-    font-weight: bold;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.row-delete-button {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
